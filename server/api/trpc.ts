@@ -12,6 +12,8 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
+import { getAuth } from "@clerk/nextjs/server";
+import { TRPCError } from "@trpc/server";
 
 /**
  * 1. CONTEXT
@@ -23,6 +25,7 @@ import { db } from "@/server/db";
 
 interface CreateContextOptions {
   headers: Headers;
+  session: string | null;
 }
 
 /**
@@ -39,6 +42,7 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     headers: opts.headers,
     db,
+    session: opts.session,
   };
 };
 
@@ -51,8 +55,12 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
 export const createTRPCContext = (opts: { req: NextRequest }) => {
   // Fetch stuff that depends on the request
 
+  const { req } = opts;
+  const { userId } = getAuth(req);
+
   return createInnerTRPCContext({
     headers: opts.req.headers,
+    session: userId,
   });
 };
 
@@ -100,3 +108,22 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+/**
+ * Protected (authenticated) procedure
+ *
+ * This is the base piece you use to build new queries and mutations on your tRPC API. It guarantee that
+ * a user querying is authorized, and also you can access user session data if they are logged in.
+ */
+const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.session) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next({
+    ctx: {
+      session: ctx.session,
+    },
+  });
+});
+
+export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
