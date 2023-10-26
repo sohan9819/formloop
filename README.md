@@ -23,11 +23,7 @@ cd formloop
 
 ```shell
 docker-compose up -d
-```
-
-or
-
-```shell
+# or
 docker compose up -d
 ```
 
