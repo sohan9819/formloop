@@ -58,13 +58,13 @@ export async function POST(req: Request) {
           (eml) => eml.id === primary_email_address_id,
         )?.email_address;
 
-        console.log(`User created ${id} : `, {
-          id,
-          first_name,
-          last_name,
-          image_url,
-          email: email,
-        });
+        // console.log(`User created ${id} : `, {
+        //   id,
+        //   first_name,
+        //   last_name,
+        //   image_url,
+        //   email: email,
+        // });
 
         // Create User in DB
         await db.user.create({
@@ -156,15 +156,14 @@ export async function POST(req: Request) {
         );
       }
 
-      default:
-        const { id } = evt.data;
-
+      default: {
         // console.log(`User ${id}, unknown action: ${eventType}`);
 
         return NextResponse.json(
           { message: "All is well, unknown action" },
           { status: 204 },
         );
+      }
     }
   } catch (_e) {
     const error = _e as Error;

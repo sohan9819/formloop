@@ -121,11 +121,6 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
   }
 
   try {
-    // const user = await db.user.findUnique({
-    //   where: {
-    //     id: ctx.session,
-    //   },
-    // });
     const user = await ctx.db.user.findUnique({
       where: {
         id: ctx.session,
