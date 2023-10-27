@@ -117,13 +117,27 @@ export const publicProcedure = t.procedure;
  */
 const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
   if (!ctx.session) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+    throw new TRPCError({ code: "UNAUTHORIZED", message: "Session Not Found" });
   }
-  return next({
-    ctx: {
-      session: ctx.session,
-    },
-  });
+
+  try {
+    const user = await ctx.db.user.findUnique({
+      where: {
+        id: ctx.session,
+      },
+    });
+    console.log("User session : ", user);
+    return next({
+      ctx: {
+        session: user,
+      },
+    });
+  } catch (error) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Session User Not Found",
+    });
+  }
 });
 
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);

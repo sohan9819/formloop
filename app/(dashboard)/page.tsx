@@ -1,5 +1,7 @@
-import Link from "next/link";
-
 export default function Home() {
-  return <main>Hello world</main>;
+  return (
+    <div className="container pt-4">
+      <h1>Hello World</h1>
+    </div>
+  );
 }
