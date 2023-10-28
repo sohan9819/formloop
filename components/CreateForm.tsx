@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { ImSpinner2 } from "react-icons/im";
 import { toast } from "react-hot-toast";
 import { BsFileEarmarkPlus } from "react-icons/bs";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,12 +39,23 @@ const FormSchema = z.object({
 type FormSchema = z.infer<typeof FormSchema>;
 
 const CreateForm = () => {
-  const { mutateAsync: createForm } = api.form.create.useMutation({
-    onSuccess: (data) => {
-      console.log("Form created successfully : ", data);
+  const [dialogState, setDialogState] = useState(false);
+  const utils = api.useContext();
+  const router = useRouter();
+  const { mutate: createForm } = api.form.create.useMutation({
+    onSuccess: ({ id: formId }) => {
+      toast.success("Form created successfully");
+      console.log("Form created successfully : ", formId);
+      router.refresh();
+      router.push(`/builder/${formId}`);
+      void utils.form.getForms.invalidate();
     },
-    onError(error) {
+    onError: (error) => {
+      toast.error("Error creating a form");
       console.log("Error creating a form :", error.message);
+    },
+    onSettled: () => {
+      setDialogState(false);
     },
   });
 
@@ -52,30 +65,20 @@ const CreateForm = () => {
 
   const onSubmit = (values: FormSchema) => {
     console.log("Form values : ", values);
-    try {
-      const formStatus = createForm(values);
-      void toast.promise(formStatus, {
-        loading: "Creating a new form...",
-        success: "Form created successfully",
-        error: "Error creating a form",
-      });
-    } catch (_e) {
-      const error = _e as Error;
-      toast.error(`Error : ${error.message}`);
-    }
+    createForm(values);
   };
 
   return (
-    <Dialog>
+    <Dialog open={dialogState} onOpenChange={setDialogState}>
       <DialogTrigger asChild>
         <Button
           variant={"outline"}
           className="group flex h-[190px] flex-col items-center justify-center gap-4 border border-dashed border-primary/20 bg-background hover:cursor-pointer hover:border-primary"
         >
           <BsFileEarmarkPlus className="h-8 w-8 text-muted-foreground group-hover:text-primary" />
-          <p className="text-xl font-bold text-muted-foreground group-hover:text-primary">
+          <span className="text-xl font-bold text-muted-foreground group-hover:text-primary">
             Create new form
-          </p>
+          </span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -121,7 +124,7 @@ const CreateForm = () => {
                     />
                   </FormControl>
                   {/* <FormDescription>
-                    This is your public display name.
+                    This is your public display describtion.
                   </FormDescription> */}
                   <FormMessage />
                 </FormItem>
