@@ -24,7 +24,6 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -102,9 +101,6 @@ const CreateForm = () => {
                   <FormControl>
                     <Input placeholder="Enter form name" {...field} />
                   </FormControl>
-                  {/* <FormDescription>
-                    This is your public display name.
-                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
@@ -123,9 +119,6 @@ const CreateForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  {/* <FormDescription>
-                    This is your public display describtion.
-                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
