@@ -1,6 +1,6 @@
 import { api } from "@/trpc/server";
 import { type RouterOutputs } from "@/trpc/shared";
-import { Suspense, type ReactNode, createElement } from "react";
+import { Suspense, type ReactNode } from "react";
 
 import { StatsCardsData } from "@/constants";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import CreateForm from "@/components/CreateForm";
 
 export default function Home() {
   return (
@@ -22,6 +23,9 @@ export default function Home() {
       <Separator className={"my-6"} />
       <h2 className="col-span-2 text-4xl font-bold">Your forms</h2>
       <Separator className={"my-6"} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <CreateForm />
+      </div>
     </div>
   );
 }
@@ -45,13 +49,11 @@ function StatsCards(props: StatsCardsProps) {
         <StatsCard
           key={index}
           title={cardData.title}
-          icon={createElement(cardData.icon, {
-            className: `text-${cardData.color}-600`,
-          })}
+          icon={cardData.icon}
           helperText={cardData.helperText}
           value={data?.visits.toLocaleString() ?? ""}
           loading={loading}
-          className={`shadow-md shadow-${cardData.color}-600`}
+          className={`shadow-md ${cardData.colorClass}`}
         />
       ))}
     </div>
@@ -113,4 +115,12 @@ function StatsCard({
       </CardFooter>
     </Card>
   );
+}
+
+function FormCardSkeleton() {
+  return <Skeleton className="h-[190px] w-full border-2 border-primary/20" />;
+}
+
+async function FormCards() {
+  const forms = await api.form.getForms.query();
 }

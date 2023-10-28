@@ -1,21 +1,9 @@
-// import { z } from "zod";
+import { z } from "zod";
 
-import {
-  // publicProcedure,
-  protectedProcedure,
-  createTRPCRouter,
-} from "@/server/api/trpc";
-// import { TRPCError } from "@trpc/server";
+import { protectedProcedure, createTRPCRouter } from "@/server/api/trpc";
 
 export const formRouter = createTRPCRouter({
   getFormStats: protectedProcedure.query(async ({ ctx }) => {
-    // if (input.userId !== ctx.session?.id) {
-    //   throw new TRPCError({
-    //     code: "NOT_FOUND",
-    //     message: "User Not Found",
-    //   });
-    // }
-
     const stats = await ctx.db.form.aggregate({
       where: {
         userld: ctx.session?.id,
@@ -37,5 +25,28 @@ export const formRouter = createTRPCRouter({
       submissionRate,
       bounceRate,
     };
+  }),
+  create: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(3),
+        description: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.form.create({
+        data: {
+          userld: ctx.session!.id,
+          name: input.name,
+          description: input.description,
+        },
+      });
+    }),
+  getForms: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.form.findMany({
+      where: {
+        userld: ctx.session!.id,
+      },
+    });
   }),
 });
