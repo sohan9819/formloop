@@ -126,7 +126,7 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
         id: ctx.session,
       },
     });
-    console.log("User session : ", user);
+    // console.log("User session : ", user);
     return next({
       ctx: {
         session: user,
