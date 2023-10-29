@@ -55,6 +55,10 @@ jobs:
           npm install -g pnpm
           pnpm install
 
+      - name: Install Prisma
+        run: |
+          pnpm install prisma --save-dev
+
       - name: Database Migrations
         run: |
           pnpm db:push
