@@ -50,19 +50,19 @@ jobs:
           echo "NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL" >> GITHUB_ENV
           echo "WEBHOOK_SECRET=$WEBHOOK_SECRET" >> GITHUB_ENV
 
-      - name: Install dependencies
-        run: |
-          npm install -g pnpm
-          pnpm install
+      # - name: Install dependencies
+      #   run: |
+      #     npm install -g pnpm
+      #     pnpm install
 
-      - name: Install Prisma
-        run: |
-          pnpm install prisma --save-dev
+      # - name: Install Prisma
+      #   run: |
+      #     pnpm install prisma --save-dev
 
-      - name: Database Migrations
-        run: |
-          pnpm db:push
-          pnpm db:generate
+      # - name: Database Migrations
+      #   run: |
+      #     pnpm db:push
+      #     pnpm db:generate
 
       - name: Typecheck
         run: pnpm typecheck
