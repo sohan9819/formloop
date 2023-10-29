@@ -32,8 +32,8 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Install Prisma CLI
-        run: npm install prisma --save-dev
+      # - name: Install Prisma CLI
+      #   run: npm install prisma --save-dev
 
       - name: Setup Environment
         run: |
