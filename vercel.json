@@ -1,0 +1,12 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "api/prisma/schema.prisma",
+            "use": "@prisma/cli",
+            "config": {
+                "prismaVersion": "2.28.0"
+            }
+        }
+    ]
+}
