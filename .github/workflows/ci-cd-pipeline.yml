@@ -32,6 +32,9 @@ jobs:
         with:
           node-version: "18"
 
+      - name: Install Prisma CLI
+        run: npm install prisma --save-dev
+
       - name: Setup Environment
         run: |
           echo "NODE_ENV=$NODE_ENV" >> GITHUB_ENV
@@ -58,8 +61,8 @@ jobs:
 
       - name: Database Migrations
         run: |
-          pnpm db:push
-          pnpm db:generate
+          npx prisma db push push
+          npx prisma generate
 
       - name: Typecheck
         run: pnpm typecheck
