@@ -32,9 +32,6 @@ jobs:
         with:
           node-version: "18"
 
-      # - name: Install Prisma CLI
-      #   run: npm install prisma --save-dev
-
       - name: Setup Environment
         run: |
           echo "NODE_ENV=$NODE_ENV" >> GITHUB_ENV
@@ -53,9 +50,6 @@ jobs:
           echo "NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL" >> GITHUB_ENV
           echo "WEBHOOK_SECRET=$WEBHOOK_SECRET" >> GITHUB_ENV
 
-      # - name: Install pnpm
-      #   run: npm install -g pnpm
-
       - name: Install dependencies
         run: npm install
 
@@ -69,6 +63,3 @@ jobs:
 
       - name: Linting
         run: npm run lint
-
-      # - name: Build
-      #   run: npm run build
