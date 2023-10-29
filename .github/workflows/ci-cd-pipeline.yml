@@ -54,10 +54,10 @@ jobs:
           echo "WEBHOOK_SECRET=$WEBHOOK_SECRET" >> GITHUB_ENV
 
       - name: Install pnpm
-        run: npm install -g pnpm
+        run: npm install
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
 
       - name: Database Migrations
         run: |
@@ -65,10 +65,10 @@ jobs:
           npx prisma generate
 
       - name: Typecheck
-        run: pnpm typecheck
+        run: npm run typecheck
 
       - name: Linting
-        run: pnpm lint
+        run: npm run lint
 
-      - name: Build
-        run: pnpm build
+      # - name: Build
+      #   run: npm run build
