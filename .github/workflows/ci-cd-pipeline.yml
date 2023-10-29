@@ -1,0 +1,65 @@
+name: CI
+
+on: [push, pull_request]
+
+env:
+  NODE_ENV: "production"
+  POSTGRES_URL: ${{secrets.POSTGRES_URL}}
+  POSTGRES_PRISMA_URL: ${{secrets.POSTGRES_PRISMA_URL}}
+  POSTGRES_URL_NON_POOLING: ${{secrets.POSTGRES_URL_NON_POOLING}}
+  POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+  POSTGRES_HOST: ${{secrets.POSTGRES_HOST}}
+  POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+  POSTGRES_DATABASE: ${{secrets.POSTGRES_DATABASE}}
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}}
+  CLERK_SECRET_KEY: ${{secrets.CLERK_SECRET_KEY}}
+  NEXT_PUBLIC_CLERK_SIGN_IN_URL: /sign-in
+  NEXT_PUBLIC_CLERK_SIGN_UP_URL: /sign-up
+  NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
+  NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
+  WEBHOOK_SECRET: ${{secrets.WEBHOOK_SECRET}}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Setup Environment
+        run: |
+          echo "NODE_ENV=$NODE_ENV" >> GITHUB_ENV
+          echo "POSTGRES_URL=$POSTGRES_URL" >> GITHUB_ENV
+          echo "POSTGRES_PRISMA_URL=$POSTGRES_PRISMA_URL" >> GITHUB_ENV
+          echo "POSTGRES_URL_NON_POOLING=$POSTGRES_URL_NON_POOLING" >> GITHUB_ENV
+          echo "POSTGRES_USER=$POSTGRES_USER" >> GITHUB_ENV
+          echo "POSTGRES_HOST=$POSTGRES_HOST" >> GITHUB_ENV
+          echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> GITHUB_ENV
+          echo "POSTGRES_DATABASE=$POSTGRES_DATABASE" >> GITHUB_ENV
+          echo "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY" >> GITHUB_ENV
+          echo "CLERK_SECRET_KEY=$CLERK_SECRET_KEY" >> GITHUB_ENV
+          echo "NEXT_PUBLIC_CLERK_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_SIGN_IN_URL" >> GITHUB_ENV
+          echo "NEXT_PUBLIC_CLERK_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_SIGN_UP_URL" >> GITHUB_ENV
+          echo "NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL" >> GITHUB_ENV
+          echo "NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL" >> GITHUB_ENV
+          echo "WEBHOOK_SECRET=$WEBHOOK_SECRET" >> GITHUB_ENV
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Database Migrations
+        run: |
+          npx prisma db push push
+          npx prisma generate
+
+      # - name: Typecheck
+      #   run: npm run typecheck
+
+      - name: Linting
+        run: npm run lint
