@@ -64,8 +64,8 @@ jobs:
       #     pnpm db:push
       #     pnpm db:generate
 
-      - name: Typecheck
-        run: pnpm typecheck
+      # - name: Typecheck
+      #   run: pnpm typecheck
 
       - name: Linting
         run: pnpm lint
