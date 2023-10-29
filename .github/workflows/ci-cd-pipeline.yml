@@ -55,17 +55,17 @@ jobs:
           npm install -g pnpm
           pnpm install
 
-      # - name: Install Prisma
-      #   run: |
-      #     pnpm install prisma --save-dev
+      - name: Install Prisma
+        run: |
+          pnpm install prisma --save-dev
 
-      # - name: Database Migrations
-      #   run: |
-      #     pnpm db:push
-      #     pnpm db:generate
+      - name: Database Migrations
+        run: |
+          pnpm db:push
+          pnpm db:generate
 
-      # - name: Typecheck
-      #   run: pnpm typecheck
+      - name: Typecheck
+        run: pnpm typecheck
 
       - name: Linting
         run: pnpm lint
