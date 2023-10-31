@@ -57,7 +57,7 @@ jobs:
           echo "WEBHOOK_SECRET=$WEBHOOK_SECRET" >> GITHUB_ENV
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Database Migrations
         run: |
@@ -65,7 +65,10 @@ jobs:
           pnpm db:generate
 
       - name: Typecheck
-        run: pnpm run typecheck
+        run: pnpm typecheck
 
       - name: Linting
-        run: pnpm run lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build
