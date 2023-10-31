@@ -57,7 +57,9 @@ jobs:
           echo "WEBHOOK_SECRET=$WEBHOOK_SECRET" >> GITHUB_ENV
 
       - name: Install dependencies
-        run: pnpm install
+        run: |
+          pnpm store prune
+          pnpm install
 
       - name: Database Migrations
         run: |
