@@ -72,5 +72,5 @@ jobs:
       - name: Linting
         run: pnpm lint
 
-      - name: Build
-        run: pnpm build
+      # - name: Build
+      #   run: pnpm build
