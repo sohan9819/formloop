@@ -40,6 +40,7 @@ jobs:
 
       - name: Setup Environment
         run: |
+          export NODE_ENV=development
           echo "NODE_ENV=$NODE_ENV" >> GITHUB_ENV
           echo "POSTGRES_URL=$POSTGRES_URL" >> GITHUB_ENV
           echo "POSTGRES_PRISMA_URL=$POSTGRES_PRISMA_URL" >> GITHUB_ENV
