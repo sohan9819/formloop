@@ -3,7 +3,7 @@ name: CI
 on: [push, pull_request]
 
 env:
-  NODE_ENV: "production"
+  NODE_ENV: "development"
   POSTGRES_URL: ${{secrets.POSTGRES_URL}}
   POSTGRES_PRISMA_URL: ${{secrets.POSTGRES_PRISMA_URL}}
   POSTGRES_URL_NON_POOLING: ${{secrets.POSTGRES_URL_NON_POOLING}}
@@ -25,12 +25,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: 18.x
+          cache: "pnpm"
 
       - name: Setup Environment
         run: |
@@ -51,15 +57,20 @@ jobs:
           echo "WEBHOOK_SECRET=$WEBHOOK_SECRET" >> GITHUB_ENV
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          pnpm install
+          pnpm store prune
 
       - name: Database Migrations
         run: |
-          npx prisma db push push
-          npx prisma generate
+          pnpm db:push
+          pnpm db:generate
 
-      # - name: Typecheck
-      #   run: npm run typecheck
+      - name: Typecheck
+        run: pnpm typecheck
 
       - name: Linting
-        run: npm run lint
+        run: pnpm lint
+
+      # - name: Build
+      #   run: pnpm build
