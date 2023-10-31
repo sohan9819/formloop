@@ -58,8 +58,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pnpm store prune
           pnpm install
+          pnpm store prune
 
       - name: Database Migrations
         run: |
