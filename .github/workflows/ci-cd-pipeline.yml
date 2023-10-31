@@ -3,7 +3,7 @@ name: CI
 on: [push, pull_request]
 
 env:
-  NODE_ENV: "production"
+  NODE_ENV: "development"
   POSTGRES_URL: ${{secrets.POSTGRES_URL}}
   POSTGRES_PRISMA_URL: ${{secrets.POSTGRES_PRISMA_URL}}
   POSTGRES_URL_NON_POOLING: ${{secrets.POSTGRES_URL_NON_POOLING}}
@@ -40,7 +40,6 @@ jobs:
 
       - name: Setup Environment
         run: |
-          export NODE_ENV=development
           echo "NODE_ENV=$NODE_ENV" >> GITHUB_ENV
           echo "POSTGRES_URL=$POSTGRES_URL" >> GITHUB_ENV
           echo "POSTGRES_PRISMA_URL=$POSTGRES_PRISMA_URL" >> GITHUB_ENV
@@ -60,10 +59,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      # - name: Database Migrations
-      #   run: |
-      #     pnpm db:push
-      #     pnpm db:generate
+      - name: Database Migrations
+        run: |
+          pnpm db:push
+          pnpm db:generate
 
       - name: Typecheck
         run: pnpm typecheck
@@ -71,5 +70,5 @@ jobs:
       - name: Linting
         run: pnpm lint
 
-      # - name: Build
-      #   run: pnpm build
+      - name: Build
+        run: pnpm build
