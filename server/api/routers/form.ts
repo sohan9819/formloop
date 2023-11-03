@@ -49,4 +49,14 @@ export const formRouter = createTRPCRouter({
       },
     });
   }),
+  getFormById: protectedProcedure
+    .input(z.object({ id: z.string().min(36) }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.form.findUnique({
+        where: {
+          userld: ctx.session?.id,
+          id: input.id,
+        },
+      });
+    }),
 });
