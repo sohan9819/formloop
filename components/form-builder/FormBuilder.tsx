@@ -1,17 +1,39 @@
 "use client";
 
-import { type Form } from "@prisma/client";
 import React from "react";
-import PublishFormBtn from "./PublishFormBtn";
-import SaveFormBtn from "./SaveFormBtn";
-import PreviewDialogBtn from "./PreviewDialogBtn";
-import Designer from "./Designer";
-import { DndContext } from "@dnd-kit/core";
-import DragOverlayWrapper from "./DragOverlayWrapper";
+import { type Form } from "@prisma/client";
+import {
+  DndContext,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+
+import PublishFormBtn from "@/components/form-builder/PublishFormBtn";
+import SaveFormBtn from "@/components/form-builder/SaveFormBtn";
+import PreviewDialogBtn from "@/components/form-builder/PreviewDialogBtn";
+import Designer from "@/components/form-builder/Designer";
+import DragOverlayWrapper from "@/components/form-builder/DragOverlayWrapper";
 
 const FormBuilder = ({ form }: { form: Form }) => {
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 10, // 10px
+    },
+  });
+
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 300, // 300ms
+      tolerance: 5, // 5px
+    },
+  });
+
+  const sensors = useSensors(mouseSensor, touchSensor);
+
   return (
-    <DndContext>
+    <DndContext sensors={sensors}>
       <main className="flex w-full flex-col">
         <nav className="flex items-center justify-between gap-3 border-b-2 p-4">
           <h2 className="truncate font-medium">

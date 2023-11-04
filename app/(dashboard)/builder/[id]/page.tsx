@@ -1,4 +1,4 @@
-import FormBuilder from "@/components/FormBuilder";
+import FormBuilder from "@/components/form-builder/FormBuilder";
 import { api } from "@/trpc/server";
 import React from "react";
 

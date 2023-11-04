@@ -1,5 +1,6 @@
 import { type IconType } from "react-icons";
-import { TextFieldFormElement } from "./fields/TextField";
+
+import { TextFieldFormElement } from "@/components/form-elements/TextField";
 
 export enum ElementsType {
   TEXT_FIELD = "TextField",

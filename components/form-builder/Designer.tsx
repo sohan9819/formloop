@@ -1,7 +1,13 @@
-import React from "react";
-import DesignerSidebar from "@/components/DesignerSidebar";
-import { type DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
-import { cn } from "@/lib/utils";
+import React, { useState } from "react";
+import {
+  type DragEndEvent,
+  useDndMonitor,
+  useDroppable,
+  useDraggable,
+} from "@dnd-kit/core";
+import { BiSolidTrash } from "react-icons/bi";
+
+import DesignerSidebar from "@/components/form-builder/DesignerSidebar";
 import useDesigner from "@/hooks/useDesigner";
 import {
   type FormElementInstance,
@@ -9,6 +15,8 @@ import {
   type ElementsType,
 } from "./FormElements";
 import { idGenerator } from "@/lib/idGenerator";
+import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
 
 const Designer = () => {
   const { elements, addElement } = useDesigner();
@@ -25,8 +33,10 @@ const Designer = () => {
       const { active, over } = event;
       if (!active || !over) return;
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const isDesignerBtnElement = active?.data?.current?.isDesignerBtnElement;
+      console.log("isDesignerBtnElement  : ", active?.data?.current);
+
+      const isDesignerBtnElement = active?.data?.current
+        ?.isDesignerBtnElement as boolean;
 
       if (isDesignerBtnElement) {
         const type = active.data?.current?.type as ElementsType;
@@ -74,6 +84,9 @@ const Designer = () => {
 };
 
 function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
+  const [mouseIsOver, setMouseIsOver] = useState(false);
+  const { removeElement } = useDesigner();
+
   const topHalf = useDroppable({
     id: element.id + "-top",
     data: {
@@ -92,21 +105,68 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
     },
   });
 
+  const draggable = useDraggable({
+    id: element.id,
+    data: {
+      type: element.type,
+      elementId: element.id,
+      isDesignerElement: true,
+    },
+  });
+
+  // if (draggable.isDragging) return null;
+  if (draggable.isDragging)
+    return (
+      <div className="relative flex h-[120px] flex-col overflow-hidden rounded-md bg-accent/20 text-foreground ring-1 ring-inset ring-accent hover:cursor-pointer"></div>
+    );
+
   const DesignerElement = FormElements[element.type].designerComponent;
 
   return (
-    <div className="relative flex h-[120px] flex-col rounded-md text-foreground ring-1 ring-inset ring-accent hover:cursor-pointer">
+    <div
+      className="relative flex h-[120px] flex-col overflow-hidden rounded-md text-foreground ring-1 ring-inset ring-accent hover:cursor-pointer"
+      onMouseEnter={() => void setMouseIsOver(true)}
+      onMouseLeave={() => void setMouseIsOver(false)}
+      ref={draggable.setNodeRef}
+      {...draggable.listeners}
+      {...draggable.attributes}
+    >
       <div
         ref={topHalf.setNodeRef}
-        className="absolute h-1/2 w-full rounded-t-md"
+        className={cn(
+          "absolute h-1/2 w-full",
+          topHalf.isOver && "border-t-4 border-t-foreground/50",
+        )}
       />
-      <div className="pointer-events-none flex h-[120px] w-full items-center rounded-md bg-accent/40 px-4 py-2">
+      <div
+        className={cn(
+          "pointer-events-none flex h-[120px] w-full items-center rounded-md bg-accent/40 px-4 py-2",
+          mouseIsOver && "opacity-30",
+        )}
+      >
         <DesignerElement elementInstance={element} />
       </div>
       <div
         ref={bottomHalf.setNodeRef}
-        className="absolute bottom-0 h-1/2 w-full rounded-b-md"
+        className={cn(
+          "absolute bottom-0 h-1/2 w-full",
+          bottomHalf.isOver && "border-b-4 border-b-foreground/50",
+        )}
       />
+      {mouseIsOver && (
+        <div className="absolute flex h-full w-full items-center justify-center">
+          <p className="w-full text-center text-sm text-muted-foreground">
+            Click for properties or drag to move
+          </p>
+          <Button
+            variant={"destructive"}
+            className="ml-auto h-full"
+            onClick={() => void removeElement(element.id)}
+          >
+            <BiSolidTrash className="h-6 w-6" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

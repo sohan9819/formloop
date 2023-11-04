@@ -1,3 +1,5 @@
+import { v4 as uuid } from "uuid";
+
 export function idGenerator(): string {
-  return Math.floor(Math.random() * 10001).toString();
+  return uuid();
 }

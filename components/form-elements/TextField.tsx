@@ -4,7 +4,7 @@ import {
   type FormElementInstance,
   type FormElement,
   type ElementAttributes,
-} from "../FormElements";
+} from "@/components/form-builder/FormElements";
 import { MdTextFields } from "react-icons/md";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";

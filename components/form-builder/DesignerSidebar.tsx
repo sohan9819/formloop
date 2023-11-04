@@ -1,6 +1,7 @@
 import React from "react";
-import { FormElements } from "./FormElements";
-import SidebarBtnElement from "./SidebarBtnElement";
+
+import { FormElements } from "@/components/form-builder/FormElements";
+import SidebarBtnElement from "@/components/form-builder/SidebarBtnElement";
 
 const DesignerSidebar = () => {
   return (
