@@ -1,4 +1,4 @@
-import React, { type ElementType } from "react";
+import React from "react";
 import DesignerSidebar from "./DesignerSidebar";
 import { type DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
 import { cn } from "@/lib/utils";
@@ -45,12 +45,12 @@ const Designer = () => {
         <div
           ref={droppable.setNodeRef}
           className={cn(
-            "m-auto flex h-full max-w-[920px] flex-1 flex-grow flex-col items-center justify-start overflow-y-auto rounded-xl bg-background",
+            "m-auto flex h-full max-w-[920px] flex-1 flex-grow flex-col items-center justify-start gap-2 overflow-y-auto rounded-xl bg-background p-4",
             droppable.isOver && "ring-2 ring-primary/20",
           )}
         >
           {elements.length > 0 && (
-            <div className="flex w-full flex-col gap-2 p-4 text-background">
+            <div className="flex w-full flex-col gap-2 text-background">
               {elements.map((element) => (
                 <DesignerElementWrapper key={element.id} element={element} />
               ))}
@@ -62,7 +62,7 @@ const Designer = () => {
             </p>
           )}
           {droppable.isOver && (
-            <div className="w-full p-4">
+            <div className="w-full">
               <div className="h-[120px] rounded-md bg-primary/20"></div>
             </div>
           )}
