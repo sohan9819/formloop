@@ -1,27 +1,23 @@
 import React from "react";
 import {
-  type FormElementInstance,
   type ElementsType,
+  type FormElementInstance,
   type FormElement,
+  type ElementAttributes,
 } from "../FormElements";
 import { MdTextFields } from "react-icons/md";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 
-const type: ElementsType = "TextField";
-// const type = ElementsType.TEXT_FIELD;
-
 type CustomInstance = FormElementInstance & {
-  extraAttributes: typeof extraAttributes;
+  extraAttributes: ElementAttributes[ElementsType.TEXT_FIELD];
 };
 
-const DesignerComponent = ({
+const DesignerComponent: React.FC<{ elementInstance: FormElementInstance }> = ({
   elementInstance,
-}: {
-  elementInstance: FormElementInstance;
 }) => {
   const element = elementInstance as CustomInstance;
-  const { label, required, placeHolder, helperText } = element.extraAttributes;
+  const { label, required, placeholder, helperText } = element.extraAttributes;
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -29,7 +25,7 @@ const DesignerComponent = ({
         {label}
         {required && "*"}
       </Label>
-      <Input readOnly disabled placeholder={placeHolder} />
+      <Input readOnly disabled placeholder={placeholder} />
       {helperText && (
         <p className="text-[0.8rem] text-muted-foreground">{helperText}</p>
       )}
@@ -38,18 +34,18 @@ const DesignerComponent = ({
 };
 
 export const TextFieldFormElement: FormElement = {
-  type,
+  type: "TextField" as ElementsType.TEXT_FIELD,
   designerComponent: DesignerComponent,
   formComponent: () => <div>Form component</div>,
   propertiesComponent: () => <div>Properties component</div>,
   construct: (id: string) => ({
     id,
-    type,
+    type: "TextField" as ElementsType.TEXT_FIELD,
     extraAttributes: {
       label: "Text field",
       helperText: "Helper text",
       required: false,
-      placeHolder: "Value here...",
+      placeholder: "Value here...",
     },
   }),
   designerBtnElement: {

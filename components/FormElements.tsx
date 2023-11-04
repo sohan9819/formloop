@@ -1,12 +1,19 @@
 import { type IconType } from "react-icons";
 import { TextFieldFormElement } from "./fields/TextField";
 
-// export enum ElementsType {
-//   TEXT_FIELD = "TextField",
-//   //   NUMBER_FIELD = "NumberField",
-// }
+export enum ElementsType {
+  TEXT_FIELD = "TextField",
+  // NUMBER_FIELD = "NumberField",
+}
 
-export type ElementsType = "TextField";
+export type ElementAttributes = {
+  [ElementsType.TEXT_FIELD]: {
+    label: string;
+    placeholder: string;
+    required: boolean;
+    helperText: string;
+  };
+};
 
 export type FormElement = {
   type: ElementsType;
@@ -18,7 +25,7 @@ export type FormElement = {
     label: string;
   };
 
-  designerComponent: React.FC;
+  designerComponent: React.FC<{ elementInstance: FormElementInstance }>;
   formComponent: React.FC;
   propertiesComponent: React.FC;
 };
@@ -26,7 +33,7 @@ export type FormElement = {
 export type FormElementInstance = {
   id: string;
   type: ElementsType;
-  extraAttributes?: Record<string, unknown>;
+  extraAttributes?: ElementAttributes[ElementsType];
 };
 
 type FormElementsType = {
