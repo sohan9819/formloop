@@ -1,5 +1,5 @@
 import React from "react";
-import DesignerSidebar from "./DesignerSidebar";
+import DesignerSidebar from "@/components/DesignerSidebar";
 import { type DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
 import { cn } from "@/lib/utils";
 import useDesigner from "@/hooks/useDesigner";
