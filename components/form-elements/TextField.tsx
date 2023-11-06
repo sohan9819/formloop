@@ -209,10 +209,31 @@ const PropertiesComponent = ({
   );
 };
 
+const FormComponent = ({
+  elementInstance,
+}: {
+  elementInstance: FormElementInstance;
+}) => {
+  const element = elementInstance as CustomInstance;
+  const { label, required, placeholder, helperText } = element.extraAttributes;
+
+  return (
+    <div className="flex w-full flex-col gap-2">
+      <Label>
+        {label} {required && <span className="text-destructive">*</span>}
+      </Label>
+      <Input placeholder={placeholder} />
+      {helperText && (
+        <p className="text-[0.8rem] text-muted-foreground">{helperText}</p>
+      )}
+    </div>
+  );
+};
+
 export const TextFieldFormElement: FormElement = {
   type: "TextField" as ElementsType.TEXT_FIELD,
   designerComponent: DesignerComponent,
-  formComponent: () => <div>Form component</div>,
+  formComponent: FormComponent,
   propertiesComponent: PropertiesComponent,
   construct: (id: string) => ({
     id,
