@@ -12,6 +12,7 @@ import { type FormElementInstance } from "@/components/form-builder/FormElements
 
 type DeisgnerContextType = {
   elements: FormElementInstance[];
+  setElements: Dispatch<SetStateAction<FormElementInstance[]>>;
 
   addElement: (index: number, element: FormElementInstance) => void;
   removeElement: (id: string) => void;
@@ -54,6 +55,7 @@ const DeisgnerContextProvider = ({ children }: { children: ReactNode }) => {
     <DeisgnerContext.Provider
       value={{
         elements,
+        setElements,
         addElement,
         removeElement,
         updateElement,

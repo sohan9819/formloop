@@ -19,7 +19,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 const Designer = () => {
-  const { elements, addElement, removeElement } = useDesigner();
+  const { elements, addElement, removeElement, setSelectedElement } =
+    useDesigner();
 
   const droppable = useDroppable({
     id: "designer-drop-area",
@@ -51,6 +52,7 @@ const Designer = () => {
         const type = active.data?.current?.type as ElementsType;
         const newElement = FormElements[type].construct(idGenerator());
         addElement(elements.length, newElement);
+        setSelectedElement(newElement);
       }
 
       // console.log("Element Drag Event : ", event);
@@ -99,6 +101,7 @@ const Designer = () => {
         }
 
         addElement(dropOverElementIndex, newElement);
+        setSelectedElement(newElement);
       }
 
       if (droppingSidebarBtnOverBottomHalfDesignerElement) {
@@ -114,6 +117,7 @@ const Designer = () => {
         }
 
         addElement(dropOverElementIndex + 1, newElement);
+        setSelectedElement(newElement);
       }
 
       // console.log("Is Designer Form Element : ", isDesignerFormElement);
@@ -302,7 +306,6 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
           className="absolute flex h-full w-full items-center justify-center"
           onClick={(event) => {
             event.stopPropagation();
-            console.log("Selected element : ", element.extraAttributes?.label);
             setSelectedElement((prev) =>
               prev?.id === element.id ? null : element,
             );

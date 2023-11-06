@@ -25,7 +25,6 @@ const PreviewDialogBtn = () => {
           Preview
         </Button>
       </DialogTrigger>
-      {/* Default max width sm:max-w-[425px] */}
       <DialogContent className="max-h-screen sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Form preview</DialogTitle>
@@ -34,8 +33,7 @@ const PreviewDialogBtn = () => {
             This is how your form will look like to your users.
           </DialogDescription>
         </DialogHeader>
-        {/* TODO : Add the preview form  */}
-        <div className="flex max-h-[calc(100vh-5rem)] flex-grow flex-col items-center justify-center overflow-y-auto bg-accent bg-[url(/paper-light.svg)] p-4 dark:bg-[url(/paper-dark.svg)]">
+        <div className="flex max-h-[calc(100vh-128px-2rem)] flex-grow flex-col items-center justify-center overflow-y-auto bg-accent bg-[url(/paper-light.svg)] p-4 dark:bg-[url(/paper-dark.svg)]">
           <div className="flex h-full w-full max-w-[620px] flex-grow flex-col gap-4 overflow-y-auto rounded-2xl bg-background p-8">
             {elements.map((element) => {
               const FormComponent = FormElements[element.type].formComponent;
@@ -46,7 +44,7 @@ const PreviewDialogBtn = () => {
           </div>
         </div>
         <DialogFooter>
-          {/* <Button type="submit">Save changes</Button> */}
+          <Button type="submit">Save changes</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
