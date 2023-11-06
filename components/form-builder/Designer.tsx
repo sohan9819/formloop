@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 const Designer = () => {
-  const { elements, addElement } = useDesigner();
+  const { elements, addElement, removeElement } = useDesigner();
 
   const droppable = useDroppable({
     id: "designer-drop-area",
@@ -33,18 +33,160 @@ const Designer = () => {
       const { active, over } = event;
       if (!active || !over) return;
 
-      console.log("isDesignerBtnElement  : ", active?.data?.current);
+      // console.log("Drag Event : ", event);
+      // console.log("Drag Active : ", active?.data?.current);
+      // console.log("Drag Over : ", over.data?.current);
 
       const isDesignerBtnElement = active?.data?.current
         ?.isDesignerBtnElement as boolean;
+      const isDesignerFormElement = active?.data?.current
+        ?.isDesignerFormElement as boolean;
+      const isDesignerDropArea = over.data?.current
+        ?.isDesignerDropArea as boolean;
 
-      if (isDesignerBtnElement) {
+      const droppingSidebarBtnOverDesignerDropArea =
+        isDesignerBtnElement && isDesignerDropArea;
+
+      if (droppingSidebarBtnOverDesignerDropArea) {
         const type = active.data?.current?.type as ElementsType;
         const newElement = FormElements[type].construct(idGenerator());
+        addElement(elements.length, newElement);
+      }
 
-        addElement(0, newElement);
+      // console.log("Element Drag Event : ", event);
+      // console.log("Element Drag Active : ", active?.data?.current);
+      // console.log("Element Drag Over : ", over?.data?.current);
 
-        console.log("NEW ELEMENT", newElement);
+      const isTopHalfDesignerElement = over?.data?.current
+        ?.isTopHalfDesignerElement as boolean;
+      const isBottomHalfDesignerElement = over?.data?.current
+        ?.isBottomHalfDesignerElement as boolean;
+
+      const droppingSidebarBtnOverTopHalfDesignerElement =
+        isDesignerBtnElement && isTopHalfDesignerElement;
+
+      const droppingSidebarBtnOverBottomHalfDesignerElement =
+        isDesignerBtnElement && isBottomHalfDesignerElement;
+
+      const droppingDesignerFormElementOverTopHalfDesignerElement =
+        isDesignerFormElement && isTopHalfDesignerElement;
+
+      const droppingDesignerFormElementOverBottomHalfDesignerElement =
+        isDesignerFormElement && isBottomHalfDesignerElement;
+
+      const droppingDesignerFormElementOverDesignerDropArea =
+        isDesignerFormElement && isDesignerDropArea;
+
+      // console.log(
+      //   "Dropped Top Half : ",
+      //   droppingSidebarBtnOverTopHalfDesignerElement,
+      // );
+      // console.log(
+      //   "Dropped Bottom Half : ",
+      //   droppingSidebarBtnOverBottomHalfDesignerElement,
+      // );
+
+      if (droppingSidebarBtnOverTopHalfDesignerElement) {
+        const type = active.data?.current?.type as ElementsType;
+        const newElement = FormElements[type].construct(idGenerator());
+        const dropOverElementId = over?.data?.current?.elementId as string;
+        const dropOverElementIndex = elements.findIndex(
+          (el) => el.id === dropOverElementId,
+        );
+
+        if (dropOverElementIndex === -1) {
+          throw new Error("element not found");
+        }
+
+        addElement(dropOverElementIndex, newElement);
+      }
+
+      if (droppingSidebarBtnOverBottomHalfDesignerElement) {
+        const type = active.data?.current?.type as ElementsType;
+        const newElement = FormElements[type].construct(idGenerator());
+        const dropOverElementId = over?.data?.current?.elementId as string;
+        const dropOverElementIndex = elements.findIndex(
+          (el) => el.id === dropOverElementId,
+        );
+
+        if (dropOverElementIndex === -1) {
+          throw new Error("element not found");
+        }
+
+        addElement(dropOverElementIndex + 1, newElement);
+      }
+
+      // console.log("Is Designer Form Element : ", isDesignerFormElement);
+      // console.log(
+      //   "Element Dropped Top Half : ",
+      //   droppingDesignerFormElementOverTopHalfDesignerElement,
+      // );
+      // console.log(
+      //   "Element Dropped Bottom Half : ",
+      //   droppingDesignerFormElementOverBottomHalfDesignerElement,
+      // );
+
+      if (droppingDesignerFormElementOverTopHalfDesignerElement) {
+        const dragActiveElementId = active?.data?.current?.elementId as string;
+        const dropOverElementId = over?.data?.current?.elementId as string;
+
+        const dragElementIndex = elements.findIndex(
+          (el) => el.id === dragActiveElementId,
+        );
+        if (dragElementIndex === -1) throw new Error("drag element not found");
+        const dragElement = elements[dragElementIndex];
+        if (!dragElement) throw new Error("drag element not found");
+
+        const dropElementIndex = elements.findIndex(
+          (el) => el.id === dropOverElementId,
+        );
+        if (dropElementIndex === -1) throw new Error("drop element not found");
+
+        removeElement(dragActiveElementId);
+
+        if (dropElementIndex < dragElementIndex) {
+          addElement(dropElementIndex, dragElement);
+        } else {
+          addElement(dropElementIndex - 1, dragElement);
+        }
+      }
+
+      if (droppingDesignerFormElementOverBottomHalfDesignerElement) {
+        const dragActiveElementId = active?.data?.current?.elementId as string;
+        const dropOverElementId = over?.data?.current?.elementId as string;
+
+        const dragElementIndex = elements.findIndex(
+          (el) => el.id === dragActiveElementId,
+        );
+        if (dragElementIndex === -1) throw new Error("drag element not found");
+        const dragElement = elements[dragElementIndex];
+        if (!dragElement) throw new Error("drag element not found");
+
+        const dropElementIndex = elements.findIndex(
+          (el) => el.id === dropOverElementId,
+        );
+        if (dropElementIndex === -1) throw new Error("drop element not found");
+
+        removeElement(dragActiveElementId);
+
+        if (dropElementIndex < dragElementIndex) {
+          addElement(dropElementIndex + 1, dragElement);
+        } else {
+          addElement(dropElementIndex, dragElement);
+        }
+      }
+
+      if (droppingDesignerFormElementOverDesignerDropArea) {
+        const dragActiveElementId = active?.data?.current?.elementId as string;
+        const dragElementIndex = elements.findIndex(
+          (el) => el.id === dragActiveElementId,
+        );
+        if (dragElementIndex === -1) throw new Error("drag element not found");
+        const dragElement = elements[dragElementIndex];
+        if (!dragElement) throw new Error("drag element not found");
+
+        removeElement(dragActiveElementId);
+        addElement(elements.length, dragElement);
       }
     },
   });
@@ -85,11 +227,12 @@ const Designer = () => {
 
 function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
-  const { removeElement } = useDesigner();
+  const { removeElement, setSelectedElement } = useDesigner();
 
   const topHalf = useDroppable({
     id: element.id + "-top",
     data: {
+      label: element.extraAttributes?.label,
       type: element.type,
       elementId: element.id,
       isTopHalfDesignerElement: true,
@@ -99,9 +242,10 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
   const bottomHalf = useDroppable({
     id: element.id + "-bottom",
     data: {
+      label: element.extraAttributes?.label,
       type: element.type,
       elementId: element.id,
-      isTopHalfDesignerElement: true,
+      isBottomHalfDesignerElement: true,
     },
   });
 
@@ -110,7 +254,7 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
     data: {
       type: element.type,
       elementId: element.id,
-      isDesignerElement: true,
+      isDesignerFormElement: true,
     },
   });
 
@@ -154,14 +298,26 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
         )}
       />
       {mouseIsOver && (
-        <div className="absolute flex h-full w-full items-center justify-center">
+        <div
+          className="absolute flex h-full w-full items-center justify-center"
+          onClick={(event) => {
+            event.stopPropagation();
+            console.log("Selected element : ", element.extraAttributes?.label);
+            setSelectedElement((prev) =>
+              prev?.id === element.id ? null : element,
+            );
+          }}
+        >
           <p className="w-full text-center text-sm text-muted-foreground">
             Click for properties or drag to move
           </p>
           <Button
             variant={"destructive"}
             className="ml-auto h-full"
-            onClick={() => void removeElement(element.id)}
+            onClick={(event) => {
+              event.stopPropagation(); // avoid selection of element while deleting
+              void removeElement(element.id);
+            }}
           >
             <BiSolidTrash className="h-6 w-6" />
           </Button>

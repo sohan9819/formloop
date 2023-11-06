@@ -28,7 +28,11 @@ export type FormElement = {
 
   designerComponent: React.FC<{ elementInstance: FormElementInstance }>;
   formComponent: React.FC;
-  propertiesComponent: React.FC;
+  propertiesComponent: React.FC<{ elementInstance: FormElementInstance }>;
+
+  formHeading?: string;
+  formDescription?: string;
+  formLogo?: string;
 };
 
 export type FormElementInstance = {

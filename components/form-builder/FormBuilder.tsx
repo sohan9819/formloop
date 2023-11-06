@@ -15,6 +15,7 @@ import SaveFormBtn from "@/components/form-builder/SaveFormBtn";
 import PreviewDialogBtn from "@/components/form-builder/PreviewDialogBtn";
 import Designer from "@/components/form-builder/Designer";
 import DragOverlayWrapper from "@/components/form-builder/DragOverlayWrapper";
+import useDesigner from "@/hooks/useDesigner";
 
 const FormBuilder = ({ form }: { form: Form }) => {
   const mouseSensor = useSensor(MouseSensor, {
@@ -31,6 +32,8 @@ const FormBuilder = ({ form }: { form: Form }) => {
   });
 
   const sensors = useSensors(mouseSensor, touchSensor);
+
+  const { setSelectedElement } = useDesigner();
 
   return (
     <DndContext sensors={sensors}>
@@ -50,7 +53,10 @@ const FormBuilder = ({ form }: { form: Form }) => {
             )}
           </div>
         </nav>
-        <div className="relative flex h-[200px] w-full flex-grow items-center justify-center overflow-y-auto bg-accent bg-[url(/paper-light.svg)] dark:bg-[url(/paper-dark.svg)]">
+        <div
+          className="relative flex h-[200px] w-full flex-grow items-center justify-center overflow-y-auto bg-accent bg-[url(/paper-light.svg)] dark:bg-[url(/paper-dark.svg)]"
+          onClick={() => void setSelectedElement(null)}
+        >
           <Designer />
         </div>
       </main>

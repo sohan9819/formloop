@@ -1,18 +1,33 @@
 "use client";
 
+import {
+  createContext,
+  type ReactNode,
+  useState,
+  type SetStateAction,
+  type Dispatch,
+} from "react";
+
 import { type FormElementInstance } from "@/components/form-builder/FormElements";
-import { createContext, type ReactNode, useState } from "react";
 
 type DeisgnerContextType = {
   elements: FormElementInstance[];
+
   addElement: (index: number, element: FormElementInstance) => void;
   removeElement: (id: string) => void;
+  updateElement: (id: string, element: FormElementInstance) => void;
+
+  selectedElement: FormElementInstance | null;
+  setSelectedElement: Dispatch<SetStateAction<FormElementInstance | null>>;
 };
 
 const DeisgnerContext = createContext<DeisgnerContextType | null>(null);
 
 const DeisgnerContextProvider = ({ children }: { children: ReactNode }) => {
   const [elements, setElements] = useState<FormElementInstance[]>([]);
+
+  const [selectedElement, setSelectedElement] =
+    useState<FormElementInstance | null>(null);
 
   const addElement = (index: number, element: FormElementInstance) => {
     setElements((prev) => {
@@ -26,8 +41,26 @@ const DeisgnerContextProvider = ({ children }: { children: ReactNode }) => {
     setElements((prev) => prev.filter((element) => element.id !== id));
   };
 
+  const updateElement = (id: string, element: FormElementInstance) => {
+    setElements((prev) => {
+      const newElements = [...prev];
+      const index = newElements.findIndex((el) => el.id === id);
+      newElements[index] = element;
+      return newElements;
+    });
+  };
+
   return (
-    <DeisgnerContext.Provider value={{ elements, addElement, removeElement }}>
+    <DeisgnerContext.Provider
+      value={{
+        elements,
+        addElement,
+        removeElement,
+        updateElement,
+        selectedElement,
+        setSelectedElement,
+      }}
+    >
       {children}
     </DeisgnerContext.Provider>
   );
