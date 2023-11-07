@@ -54,7 +54,7 @@ export const formRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return await ctx.db.form.findUnique({
         where: {
-          userld: ctx.session?.id,
+          userld: ctx.session!.id,
           id: input.id,
         },
       });
@@ -64,11 +64,24 @@ export const formRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.form.update({
         where: {
-          userld: ctx.session?.id,
+          userld: ctx.session!.id,
           id: input.id,
         },
         data: {
           content: input.jsonContent,
+        },
+      });
+    }),
+  publishForm: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.form.update({
+        where: {
+          userld: ctx.session!.id,
+          id: input.id,
+        },
+        data: {
+          published: true,
         },
       });
     }),

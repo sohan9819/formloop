@@ -5,7 +5,7 @@ import { HiSaveAs } from "react-icons/hi";
 
 import { Button } from "@/components/ui/button";
 import useDesigner from "@/hooks/useDesigner";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { api } from "@/trpc/react";
 import { FaSpinner } from "react-icons/fa";
@@ -17,7 +17,6 @@ const SaveFormBtn = ({
   id: string;
   formContent: string;
 }) => {
-  const { toast } = useToast();
   const { elements } = useDesigner();
   const jsonContent = JSON.stringify(elements);
 
