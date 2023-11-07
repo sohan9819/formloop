@@ -4,12 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { ImSpinner2 } from "react-icons/im";
-import { toast } from "react-hot-toast";
 import { BsFileEarmarkPlus } from "react-icons/bs";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 import {
   Dialog,
   DialogContent,
@@ -41,16 +42,35 @@ const CreateForm = () => {
   const [dialogState, setDialogState] = useState(false);
   const utils = api.useContext();
   const router = useRouter();
-  const { mutate: createForm } = api.form.create.useMutation({
+  const { toast } = useToast();
+  const { mutateAsync: createForm, reset } = api.form.create.useMutation({
     onSuccess: ({ id: formId }) => {
-      toast.success("Form created successfully");
-      console.log("Form created successfully : ", formId);
+      toast({
+        title: "Success",
+        description: "Form created successfully 🎉🎉🎉",
+      });
+      // console.log("Form created successfully : ", formId);
       router.refresh();
       router.push(`/builder/${formId}`);
       void utils.form.getForms.invalidate();
     },
-    onError: (error) => {
-      toast.error("Error creating a form");
+    onError: (error, data) => {
+      toast({
+        title: "Uh oh! Something went wrong.😟",
+        description: "There was a problem creating your form.",
+        action: (
+          <ToastAction
+            altText="Try again"
+            onSubmit={() => {
+              reset();
+              void onSubmit(data);
+            }}
+          >
+            Try again
+          </ToastAction>
+        ),
+        variant: "destructive",
+      });
       console.log("Error creating a form :", error.message);
     },
     onSettled: () => {
@@ -62,9 +82,9 @@ const CreateForm = () => {
     resolver: zodResolver(FormSchema),
   });
 
-  const onSubmit = (values: FormSchema) => {
+  const onSubmit = async (values: FormSchema) => {
     console.log("Form values : ", values);
-    createForm(values);
+    await createForm(values);
   };
 
   return (

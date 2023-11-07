@@ -131,7 +131,8 @@ const PropertiesComponent = ({
                   {...field}
                   placeholder="Enter label text"
                   onKeyDown={(event) => {
-                    if (event.key === "Enter") event.currentTarget.blur();
+                    if (event.key === "Enter" || event.key === "NumpadEnter")
+                      event.currentTarget.blur();
                   }}
                 />
               </FormControl>
