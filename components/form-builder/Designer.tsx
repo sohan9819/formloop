@@ -19,8 +19,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 const Designer = () => {
-  const { elements, addElement, removeElement, setSelectedElement } =
-    useDesigner();
+  const { elements, addElement, removeElement } = useDesigner();
 
   const droppable = useDroppable({
     id: "designer-drop-area",
@@ -52,7 +51,7 @@ const Designer = () => {
         const type = active.data?.current?.type as ElementsType;
         const newElement = FormElements[type].construct(idGenerator());
         addElement(elements.length, newElement);
-        setSelectedElement(newElement);
+        // setSelectedElement(newElement); // select the element when it is dropped from sidebar
       }
 
       // console.log("Element Drag Event : ", event);
@@ -101,7 +100,7 @@ const Designer = () => {
         }
 
         addElement(dropOverElementIndex, newElement);
-        setSelectedElement(newElement);
+        // setSelectedElement(newElement); // select the element when it is dropped from sidebar
       }
 
       if (droppingSidebarBtnOverBottomHalfDesignerElement) {
@@ -117,7 +116,7 @@ const Designer = () => {
         }
 
         addElement(dropOverElementIndex + 1, newElement);
-        setSelectedElement(newElement);
+        // setSelectedElement(newElement); // select the element when it is dropped from sidebar
       }
 
       // console.log("Is Designer Form Element : ", isDesignerFormElement);

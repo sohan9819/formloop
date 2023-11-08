@@ -1,13 +1,15 @@
-import { api } from "@/trpc/server";
-import { type RouterOutputs } from "@/trpc/shared";
 import { Suspense, type ReactNode } from "react";
 import { LuView } from "react-icons/lu";
 import { FaWpforms, FaEdit } from "react-icons/fa";
 import { HiCursorClick } from "react-icons/hi";
 import { TbArrowBounce } from "react-icons/tb";
 import { BiRightArrowAlt } from "react-icons/bi";
+import { FileEdit } from "lucide-react";
 import { formatDistance } from "date-fns";
 import Link from "next/link";
+
+import { type RouterOutputs } from "@/trpc/shared";
+import { api } from "@/trpc/server";
 
 import {
   Card,
@@ -209,11 +211,11 @@ function FormCard({
         {!form.published && (
           <Button
             asChild
-            className="mt-2 w-full gap-4 text-base"
+            className="mt-2 w-full gap-2 text-base"
             variant={"secondary"}
           >
             <Link href={`/builder/${form.id}`}>
-              Edit form <FaEdit />
+              Edit form <FileEdit className="h-4 w-4" />
             </Link>
           </Button>
         )}
