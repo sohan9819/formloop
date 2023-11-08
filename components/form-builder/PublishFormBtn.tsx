@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ScreenShare } from "lucide-react";
 import { FaSpinner } from "react-icons/fa";

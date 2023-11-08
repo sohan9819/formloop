@@ -1,6 +1,6 @@
 import { Suspense, type ReactNode } from "react";
 import { LuView } from "react-icons/lu";
-import { FaWpforms, FaEdit } from "react-icons/fa";
+import { FaWpforms } from "react-icons/fa";
 import { HiCursorClick } from "react-icons/hi";
 import { TbArrowBounce } from "react-icons/tb";
 import { BiRightArrowAlt } from "react-icons/bi";
