@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { HiSaveAs } from "react-icons/hi";
+import { Import } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import useDesigner from "@/hooks/useDesigner";
@@ -74,7 +74,7 @@ const SaveFormBtn = ({
       className="gap-2"
       onClick={onClick}
     >
-      <HiSaveAs className="h-4 w-4" />
+      <Import className="h-4 w-4" />
       Save
       {isLoading && <FaSpinner className="animate-spin" />}
     </Button>
